@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Form</title>
+    <link rel="stylesheet" href="Apply.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="job-title"></h1>
+        <h2 id="experience-level"></h1>
+        <h4 id="experienceDescription"></h4>
+        <h4 id="expectationDescription"></h4>
+        <form id="application-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="description">Your description</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cv">Upload your CV (pdf, png, jpg)*</label>
+                    <input type="file" id="cv" name="cv" accept=".pdf, .png, .jpg">
+                </div>
+            </div>
+        
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="checkbox" id="data-policy" name="data-policy" required>
+                    <label for="data-policy">I agree to the <a href="#">data policy</a>*</label>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="news" name="news">
+                    <label for="news">I agree to receive news about Samcom</label>
+                </div>
+            </div>
+            <button id="submit" >APPLY</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+    <script type="module" src="apply.js"></script>
+</body>
+</html>
