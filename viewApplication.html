@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Application</title>
+    <link rel="stylesheet" href="viewApplication.css">
+</head>
+
+<body>
+
+    <li class="nav-btn"><a href="/index.html" class="button">Logout</a></li>
+    </ul>
+    <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+    </div>
+    </nav>
+    <div class="container">
+        <h1>Applicant Details</h1>
+        <div id="application-container">
+            <div id="applicant-details">
+                <p><strong>Name:</strong> <span id="applicantName"></span></p>
+                <p><strong>Email:</strong> <span id="applicantEmail"></span></p>
+                <p><strong>Occupation:</strong> <span id="applicantPhone"></span></p>
+                <p><strong>Experience Level:</strong> <span id="applicantExperience"></span></p>
+                <p><strong>Description:</strong></p>
+            </div>
+            <div id="job-details">
+                <p><strong>experienceDescription:</strong> <span id="experienceDescription"></span></p>
+                <p><strong>expectationDescription:</strong> <span id="expectationDescription"></span></p>
+            </div>
+            <button id="download-cv" class="button">Download CV</button>
+            <button id="approve" class="button">Approve</button>
+            <button id="reject" class="button">Reject</button>
+        </div>
+        <div id="interview-section" style="display: none;">
+            <label for="interview-date">Select Interview Date:</label>
+            <input type="date" id="interview-date">
+            <label for="interview-time">Select Interview Time:</label>
+            <input type="time" id="interview-time">
+            <button id="submit-interview">Submit</button>
+        </div>
+    </div>
+    </div>
+    <script type="module" src="viewApplication.js"></script>
+</body>
+
+</html>

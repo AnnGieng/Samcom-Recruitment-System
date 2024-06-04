@@ -32,8 +32,8 @@ onValue(ref(db, 'application'), (snapshot) => {
         // Create an anchor element for the "Apply" link
         let applyLink = document.createElement('a');
         applyLink.textContent = 'View';
-        // applyLink.href = `apply.html?jobTitle=${encodeURIComponent(data[key].jobTitle)}&&id=${encodeURIComponent(data[key].id)}&&userId=${uid}`;
-        // applyLink.target = '_blank';
+        applyLink.href = `viewApplication.html?applicationId=${encodeURIComponent(key)}`;
+        applyLink.target = '_blank';
 
         cellApply.appendChild(applyLink);
 

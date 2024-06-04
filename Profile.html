@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Profile</title>
+    <link rel="stylesheet" href="Dashboard.css">
+    <link rel="stylesheet" href="Profile.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">Samcom Enterprise Recruitment System</a>
+            <div class="welcome-message">
+                <p>Welcome to your profile!</p>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="/dashboard.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="" class="nav-link">Profile</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Job Listings</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Applications</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Notifications</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Settings</a></li>
+                <li class="nav-btn"><a href="/index.html" class="button">Logout</a></li>
+            </ul>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+    <div class="profile-container">
+        <h1>Applicant Profile</h1>
+        <div class="profile-info">
+            <div class="picture">
+                <img src="images/picture.jpg" alt="picture">
+            </div>
+            <div class="profile-details">
+                <p><strong>Name:</strong> <span id="applicantName"></span></p>
+                <p><strong>Email:</strong> <span id="applicantEmail"></span></p>
+                <p><strong>Occupation:</strong> <span id="applicantPhone"></span></p>
+                <p><strong>Experience Level:</strong> <span id="applicantExperience"></span></p>
+                <p><strong>Description:</strong></p>
+                <ul id="applicantSkills">
+                    <!-- Skills will be populated here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="profile.js"></script>
+</body>
+
+</html>

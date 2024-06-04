@@ -132,6 +132,24 @@ function generateRandomString() {
     }
     return result;
 }
+document.getElementById('application-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Simulate a successful form submission process
+    setTimeout(function() {
+        // Hide the form
+        document.getElementById('application-form').style.display = 'none';
+        
+        // Show the back-to-dashboard button
+        document.getElementById('back-to-dashboard').style.display = 'block';
+    }, 1000); // Simulate a delay of 1 second
+});
+
+document.getElementById('back-to-dashboard').addEventListener('click', function() {
+    window.location.href = 'dashboard.html';
+});
+
+
 
 
 

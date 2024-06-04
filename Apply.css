@@ -1,8 +1,55 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #d1e7f7; /* Light blue background */
+    background-color: #f8f9fa; /* Light background to match the dashboard */
     margin: 0;
     padding: 0;
+}
+
+.header {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.header .logo h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+nav {
+    background-color: #343a40;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a, .logout-button {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.logout-button {
+    background-color: #dc3545;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
 }
 
 .container {
@@ -10,16 +57,23 @@ body {
     max-width: 900px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #007bff;
-    color: white;
+    background-color: #ff9900;;
+    color: #212529;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+}
+
+.title-container {
+    background-color: #ff6a00; /* Orange background for job title */
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
 }
 
 h1 {
     text-align: center;
     font-size: 1.8em;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    color: white;
 }
 
 .form-row {
@@ -37,6 +91,7 @@ h1 {
 label {
     margin-bottom: 5px;
     font-size: 1em;
+    color: #343a40;
 }
 
 textarea, input[type="file"] {
@@ -44,7 +99,7 @@ textarea, input[type="file"] {
     padding: 10px;
     font-size: 1em;
     border-radius: 5px;
-    border: none;
+    border: 1px solid #ced4da;
 }
 
 textarea {
@@ -57,7 +112,7 @@ input[type="checkbox"] {
 }
 
 a {
-    color: white;
+    color: #007bff;
     text-decoration: underline;
 }
 
@@ -65,8 +120,8 @@ button {
     display: block;
     width: 100%;
     padding: 15px;
-    background-color: white;
-    color: #007bff;
+    background-color: #005eff; /* Orange color for apply button */
+    color: white;
     border: none;
     border-radius: 5px;
     font-size: 1.2em;
@@ -76,8 +131,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
-    color: white;
+    background-color: #0066cc;
 }
 
 @media (min-width: 768px) {

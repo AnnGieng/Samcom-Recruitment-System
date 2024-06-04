@@ -1,131 +1,4 @@
-
-.application-list {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.application-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.controls {
-    display: flex;
-    align-items: center;
-}
-
-.controls label {
-    margin-right: 10px;
-}
-
-.controls select {
-    margin-right: 10px;
-    padding: 5px;
-}
-
-.controls button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.controls button:hover {
-    background-color: #0056b3;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-table, th, td {
-    border: 1px solid #dee2e6;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    background-color: #f1f1f1;
-}
-
-.pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.status-categories {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.status-btn {
-    background-color: #17a2b8;
-    color: white;
-    border: none;
-    padding: 10px;
-    margin-bottom: 5px;
-    cursor: pointer;
-    text-align: left;
-    border-radius: 5px;
-}
-
-.status-btn:hover {
-    background-color: #138496;
-}
-
-.view-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.view-btn:hover {
-    background-color: #0056b3;
-}
-
-.edit-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.edit-btn:hover {
-    background-color: #218838;
-}
-
-.delete-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
-}
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -328,4 +201,93 @@ ul {
         text-align: center;
         margin: 10px 0;
     }
+}
+
+/* Applicant Details Styles */
+#applicant-container {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#applicant-container p {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    font-size: 1em;
+    background-color: orange;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: darkorange;
+}
+
+button#download-cv {
+    background-color: #007bff;
+}
+
+button#download-cv:hover {
+    background-color: #0056b3;
+}
+
+button#approve {
+    background-color: #28a745;
+}
+
+button#approve:hover {
+    background-color: #218838;
+}
+
+button#reject {
+    background-color: #dc3545;
+}
+
+button#reject:hover {
+    background-color: #c82333;
+}
+#interview-section {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#interview-section label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#interview-section input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+#interview-section button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#interview-section button:hover {
+    background-color: #ff1f3a;
 }
