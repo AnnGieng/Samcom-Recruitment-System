@@ -20,7 +20,9 @@ const db = getDatabase();
 onValue(ref(db, 'application'), (snapshot) => {
     const data = snapshot.val();
     const dataTableBody = document.getElementById('applications-table').getElementsByTagName('tbody')[0];
-    dataTableBody.innerHTML = ''
+    dataTableBody.innerHTML = ''; // Clear existing content
+
+    // Loop through each key-value pair in data
     for (let key in data) {
         let row = dataTableBody.insertRow();
         let cellTitle = row.insertCell(0);
@@ -29,7 +31,7 @@ onValue(ref(db, 'application'), (snapshot) => {
         let cellStatus = row.insertCell(3);
         let cellApply = row.insertCell(4);
 
-        // Create an anchor element for the "Apply" link
+        // Create an anchor element for the "View" link
         let applyLink = document.createElement('a');
         applyLink.textContent = 'View';
         applyLink.href = `viewApplication.html?applicationId=${encodeURIComponent(key)}`;
@@ -37,12 +39,13 @@ onValue(ref(db, 'application'), (snapshot) => {
 
         cellApply.appendChild(applyLink);
 
-
-        cellTitle.textContent = '*';
-        cellName.textContent= data[key].userName;
+        // Set content for each cell using data[key] properties
+        cellName.textContent = data[key].userName;
         cellRole.textContent = data[key].roleName;
-        cellStatus.textContent  =data[key].applicationStatus;
-        cellLevel.textContent = data[key].experienceLevel;
-        console.log("Job Title: " + data[key].jobTitle);
+        cellStatus.textContent = data[key].applicationStatus;
+        cellTitle.textContent = '*'
+        console.log("Job Title: " + data[key].userName);
     }
 });
+
+

@@ -86,6 +86,7 @@ submit.addEventListener('click', (e) => {
             // Let's get a download URL for the file.
             getDownloadURL(snapshot.ref).then((url) => {
                 const applicationId = generateRandomString();
+                const userDescription = document.getElementById('description').value;
                 const applicationDetails = {
                     cvUrl:url,
                     userName:userName,
@@ -93,7 +94,8 @@ submit.addEventListener('click', (e) => {
                     roleId: jobId,
                     roleName: jobTitle,
                     applicationId:applicationId,
-                    applicationStatus:'pending'
+                    applicationStatus:'pending',
+                    description:userDescription
                 }
 
                 const jobRef = ref(db,'application/' + applicationId);
