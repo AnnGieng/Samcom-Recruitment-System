@@ -45,6 +45,7 @@ function getUserInformation(id) {
         const data = snapshot.val();
         email = data.email;
         userName = data.userName;
+        
     });
 }
 
