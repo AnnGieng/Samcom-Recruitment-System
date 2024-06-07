@@ -42,6 +42,24 @@
             <input type="date" id="interview-date">
             <label for="interview-time">Select Interview Time:</label>
             <input type="time" id="interview-time">
+            <div class="interview-type">
+                <label>
+                    <input type="radio" name="interview-type" value="online" id="online-interview">
+                    Online Interview
+                </label>
+                <label>
+                    <input type="radio" name="interview-type" value="physical" id="physical-interview">
+                    Physical Interview
+                </label>
+            </div>
+            <div id="online-link" style="display: none;">
+                <label for="google-meet-link">Google Meet Link:</label>
+                <input type="url" id="google-meet-link" placeholder="Enter Google Meet link">
+            </div>
+            <div id="physical-link" style="display: none;">
+                <label for="google-map-link">Google Map Link:</label>
+                <input type="url" id="google-map-link" placeholder="Enter Google Map link">
+            </div>
             <button id="submit-interview">Submit</button>
         </div>
     </div>
