@@ -1,146 +1,111 @@
+/* Apply.css */
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa; /* Light background to match the dashboard */
+    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
-}
-
-.header {
-    background-color: #343a40;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-}
-
-.header .logo h1 {
-    margin: 0;
-    font-size: 1.5em;
-}
-
-nav {
-    background-color: #343a40;
-    padding: 10px 0;
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a, .logout-button {
-    color: white;
-    text-decoration: none;
-    font-size: 1em;
-}
-
-.logout-button {
-    background-color: #dc3545;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.logout-button:hover {
-    background-color: #c82333;
 }
 
 .container {
     width: 80%;
-    max-width: 900px;
+    max-width: 800px;
     margin: 50px auto;
+    background: #ff9900;
     padding: 20px;
-    background-color: #ff9900;;
-    color: #212529;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
 
-.title-container {
-    background-color: #ff6a00; /* Orange background for job title */
-    padding: 20px;
-    border-radius: 10px 10px 0 0;
-}
-
-h1 {
+h1, h2, h3 {
     text-align: center;
-    font-size: 1.8em;
-    margin-bottom: 0;
-    color: white;
+    color: #333;
+    margin-bottom: 20px;
 }
 
 .form-row {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
 .form-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
 }
 
 label {
+    display: block;
     margin-bottom: 5px;
-    font-size: 1em;
-    color: #343a40;
+    color: #666;
 }
 
-textarea, input[type="file"] {
-    width: 100%;
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="file"],
+input[type="checkbox"] {
+    width: calc(100% - 22px);
     padding: 10px;
-    font-size: 1em;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    border: 1px solid #ced4da;
-}
-
-textarea {
-    height: 100px;
-    resize: none;
 }
 
 input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-a {
-    color: #007bff;
-    text-decoration: underline;
+    width: auto;
 }
 
 button {
     display: block;
     width: 100%;
     padding: 15px;
-    background-color: #005eff; /* Orange color for apply button */
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1.2em;
     cursor: pointer;
-    text-align: center;
+    font-size: 16px;
     margin-top: 20px;
 }
 
 button:hover {
-    background-color: #0066cc;
+    background-color: #0056b3;
 }
 
-@media (min-width: 768px) {
-    .form-row {
-        flex-direction: row;
-    }
+.nav-btn {
+    text-align: right;
+    margin: 20px;
+}
 
-    .form-group {
-        flex: 1;
-        padding: 0 10px;
-    }
+.nav-btn a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.nav-btn a:hover {
+    color: #0056b3;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+#back-to-dashboard {
+    display: none;
+    width: auto;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+#back-to-dashboard:hover {
+    background-color: #218838;
 }

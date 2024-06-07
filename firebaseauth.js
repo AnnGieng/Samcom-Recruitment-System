@@ -37,6 +37,7 @@
         alert('Login successful')
         const user = userCredential.user;
         const userId = user.uid;
+        console.log('UserId: ' + userId);
         const dbRef = ref(db, 'users/'+ userId);
         get(dbRef).then((snapshot)=>{
           if(snapshot.exists()){

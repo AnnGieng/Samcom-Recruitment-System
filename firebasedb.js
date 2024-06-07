@@ -28,15 +28,13 @@ submit.addEventListener('click', (e) => {
 
     const jobTitle = document.getElementById('jobTitle').value;
     const experienceLevel = document.getElementById('experienceLevel').value;
-    const experienceDescription = document.getElementById('experienceDescription').value;
-    const expectationDescription = document.getElementById('expectationDescription').value;
+    const mandatorySkill = document.getElementById('mandatoryskill').value;
     const jobId = generateRandomString();
 
     const jobInformation = {
         jobTitle: jobTitle,
         experienceLevel: experienceLevel,
-        experienceDescription: experienceDescription,
-        expectationDescription: expectationDescription,
+        mandatorySkill:mandatorySkill,
         id: jobId
     }
     set(ref(db, 'jobs/' + jobId), jobInformation)

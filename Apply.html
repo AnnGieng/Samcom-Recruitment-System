@@ -14,17 +14,83 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
+            <div class="container">
+                <h1 id="job-title">Job Application Form</h1>
+                <form id="application-form">
+                    <div class="form-row">
+                        <h2>Personal Details</h2>
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="number" id="age" name="age">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <input type="text" id="address" name="address">
+                        </div>
+                        <div class="form-row"></div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number:</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <input type="text" id="gender" name="gender">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email ID:</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <h2>Graduation</h2>
+                        <div class="form-group">
+                            <label for="grad-degree">Graduation Degree:</label>
+                            <input type="text" id="grad-degree" name="grad-degree">
+                        </div>
+                        <div class="form-group">
+                            <label for="grad-percentage">Graduation Percentage:</label>
+                            <input type="number" id="grad-percentage" name="grad-percentage">
+                        </div>
+                    </div>
+        
+                    <div class="form-row">
+                        <h2>College</h2>
+                        <div class="form-group">
+                            <label for="grad-diploma">Graduation Diploma:</label>
+                            <input type="text" id="grad-diploma" name="grad-diploma">
+                        </div>
+                        <div class="form-group">
+                            <label for="college-percentage">Graduation Percentage:</label>
+                            <input type="number" id="college-percentage" name="college-percentage">
+                        </div>
+                        <div class="form-row">
+                            <h2>Previous Job Description</h2>
+                            <div class="form-group">
+                                <label for="Designation">Designation:</label>
+                                <input type="text" id="designation" name="designation">
+                            </div>
+                            <div class="form-group">
+                                <label for="Total-Years-of-Experience">Total Years of Experience:</label>
+                                <input type="number" id="total-years-of-experience" name="total-years-of-experience">
+                            </div>
+                    </div>
     <div class="container">
         <h1 id="job-title"></h1>
         <h2 id="experience-level"></h1>
-        <h4 id="experienceDescription"></h4>
-        <h4 id="expectationDescription"></h4>
+        <h4 id="mandatoryskill"></h4>
         <form id="application-form">
             <div class="form-row">
-                <div class="form-group">
-                    <label for="description">Your description</label>
-                    <textarea id="description" name="description"></textarea>
-                </div>
+                <div class="form-row">
+                    <h2>Additional Information</h2>
+                    <div class="form-group">
+                        <label for="skills">Your Skills</label>
+                        <input type="text" id="skills" name="skills" required>
+                    </div>
                 <div class="form-group">
                     <label for="cv">Upload your CV (pdf, png, jpg)*</label>
                     <input type="file" id="cv" name="cv" accept=".pdf, .png, .jpg">

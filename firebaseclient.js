@@ -32,7 +32,8 @@ onValue(ref(db, 'jobs'), (snapshot) => {
         let row = dataTableBody.insertRow();
         let cellTitle = row.insertCell(0);
         let cellLevel = row.insertCell(1);
-        let cellApply = row.insertCell(2);
+        let cellMandatory = row.insertCell(2);
+        let cellApply = row.insertCell(3);
 
         // Create an anchor element for the "Apply" link
         let applyLink = document.createElement('a');
@@ -43,6 +44,7 @@ onValue(ref(db, 'jobs'), (snapshot) => {
         cellApply.appendChild(applyLink);
 
         cellTitle.textContent = data[key].jobTitle;
+        cellMandatory.textContent = data[key].mandatorySkill;
         cellLevel.textContent = data[key].experienceLevel;
         console.log("Job Title: " + data[key].jobTitle);
     }
