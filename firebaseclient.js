@@ -49,3 +49,11 @@ onValue(ref(db, 'jobs'), (snapshot) => {
         console.log("Job Title: " + data[key].jobTitle);
     }
 });
+
+const applicationElement = document.getElementById('application');
+
+applicationElement.addEventListener('click',(e)=>{
+    e.preventDefault()
+    applicationElement.setAttribute(`href', 'Clientapplications.html?userId=${uid}`)
+    applicationElement.click()
+})

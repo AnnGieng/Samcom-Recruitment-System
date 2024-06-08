@@ -2,17 +2,17 @@
     <div class="navbar-container">
         <a href="#" class="navbar-logo">Samcom Enterprise Recruitment System</a>
         <div class="welcome-message">
-            <p>View Interviews!</p>
+            <p></p>Your Applications!</p>
             <!-- You can customize this welcome message to display the user's name or any other relevant information -->
         </div>
 
         <ul class="nav-menu" id="nav-menu">
 
-            <li class="nav-item"><a href="/adminDashboard.html" class="nav-link">Post Job</a></li>
+            <li class="nav-item"><a href="/dashboard.html" class="nav-link">Home</a></li>
             <li class="nav-item"><a href="/Applications.html" class="nav-link">Applications</a></li>
-            <li class="nav-item"><a href="/interviews.html" class="nav-link">Interviews</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Notifications</a></li>
             <li class="nav-item"><a href="#" class="nav-link">Settings</a></li>
-            <li class="nav-btn"><a href="#" class="button" id="logoutBtn">Logout</a></li>
+            <li class="nav-btn"><a href="/index.html" class="button" id="logoutBtn">Logout</a></li>
         </ul>
         <div class="menu-toggle" id="mobile-menu">
             <span class="bar"></span>
@@ -25,18 +25,27 @@
     <link rel="stylesheet" href="application.css">
     <div class="application-list">
         <div class="application-header">
-            <h2>Interviews</h2>
+            <h2>Applications</h2>
             <div class="controls">
-                <button id="generate-report">Generate report</button>
+                <button id="new-applicant">+ New Applicant</button>
             </div>
         </div>
-        <table id="applications-table">
+        <table id="application-table">
             <thead>
                 <tr>
-                    <th>Applicant</th>
-                    <th>Interviewer</th>
-                    <th>Scheduled date</th>
-                    <th>Scheduled time</th>
-                    <th>Action</th>
+                    <th>Role Applied</th>
+                    <th>Status</th>
+                    <th>View</th>
                 </tr>
             </thead>
+            <div class="pagination">
+                <span>Record 1 of 4</span>
+                <button>Next</button>
+            </div>
+        </div>
+    </main>
+</div>
+<script type="module" src="Clientapplications.js"></script>
+</body>
+
+</html>

@@ -22,12 +22,13 @@ const storage = getStorage();
 
 var jobId;
 var jobTitle;
+var userId;
 
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     jobTitle = urlParams.get('jobTitle');
     jobId = urlParams.get('id');
-    const userId = urlParams.get('userId');
+    userId = urlParams.get('userId');
     if (userId) {
         getUserInformation(userId);
     }
@@ -45,7 +46,7 @@ function getUserInformation(id) {
         const data = snapshot.val();
         email = data.email;
         userName = data.userName;
-        
+
     });
 }
 
@@ -115,7 +116,9 @@ submit.addEventListener('click', (e) => {
                     gradDiploma:gradDiploma,
                     collegePercentage:collegePercentage,
                     designation:designation,
-                    totalYears:totalYears
+                    totalYears:totalYears,
+                    jobId:jobId,
+                    userId:userId
                 }
 
                 const jobRef = ref(db, 'application/' + applicationId);
