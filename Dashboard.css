@@ -63,6 +63,11 @@ ul {
     transition: background 0.3s;
 }
 
+.nav-link-application {
+    color: #fff;
+    padding: 14px 20px;
+    transition: background 0.3s;
+}
 .nav-link:hover {
     background-color: #575757;
     border-radius: 4px;

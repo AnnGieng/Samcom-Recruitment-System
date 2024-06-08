@@ -50,7 +50,7 @@ onValue(ref(db, 'jobs'), (snapshot) => {
     }
 });
 
-const applicationElement = document.getElementById('application');
+const applicationElement = document.querySelector('.nav-item .nav-link-application');;
 
 applicationElement.addEventListener('click',(e)=>{
     e.preventDefault()

@@ -22,16 +22,12 @@ const storage = getStorage();
 
 var jobId;
 var jobTitle;
-var userId;
+var userId = localStorage.getItem('auth-token');
 
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     jobTitle = urlParams.get('jobTitle');
     jobId = urlParams.get('id');
-    userId = urlParams.get('userId');
-    if (userId) {
-        getUserInformation(userId);
-    }
 
     if (jobTitle && jobId) {
         getJobDetails(jobId);

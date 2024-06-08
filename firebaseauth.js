@@ -44,6 +44,7 @@
             const data = snapshot.val();
             const role = data.role;
             console.log('Role ' + role);
+            localStorage.setItem('auth-token', userId);
             if(role == 'Admin'){
               window.location.href = `adminDashboard.html?uid=${encodeURIComponent(userId)}`;
             }else{
@@ -101,6 +102,7 @@
         }
         set(ref(db,'users/'+ userId),userInformation)
         .then(()=>{
+          localStorage.setItem('auth-token', userId);
           if(selectedOption == 'Admin'){
             window.location.href = `adminDashboard.html?uid=${encodeURIComponent(userId)}`;
           }else{
