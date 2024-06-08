@@ -37,11 +37,12 @@ onValue(ref(db, 'application'), (snapshot) => {
             let cellRole = row.insertCell(0);
             let cellStatus = row.insertCell(1);
             let cellView = row.insertCell(2);
+            let applicationId = data[key].applicationId;
     
             // Create an anchor element for the "Apply" link
             let viewLink = document.createElement('a');
             viewLink.textContent = 'View';
-            viewLink.href = `#`;
+            viewLink.href = `ApplicationDetails.html?applicationId=${encodeURIComponent(applicationId)}`;
             // applyLink.target = '_blank';
             if( data[key].applicationStatus === 'Interview Scheduled'){
                 cellView.appendChild(viewLink);
