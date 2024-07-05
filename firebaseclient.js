@@ -49,6 +49,18 @@ onValue(ref(db, 'jobs'), (snapshot) => {
         console.log("Job Title: " + data[key].jobTitle);
     }
 });
+function filterJobs() {
+    const searchJob = document.getElementById('searchJob').value.toLowerCase();
+    const filteredJobs = {};
+
+    for (let key in jobsData) {
+        if (jobsData[key].jobTitle.toLowerCase().includes(searchJob)) {
+            filteredJobs[key] = jobsData[key];
+        }
+    }
+
+    displayJobs(filteredJobs);
+}
 
 const applicationElement = document.querySelector('.nav-item .nav-link-application');;
 

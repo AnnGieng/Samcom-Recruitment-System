@@ -34,7 +34,7 @@ function getApplicationDetails(id) {
         const data = snapshot.val();
         if (data) {
             console.log(`Date is ${data.interviewDate}`);
-            document.getElementById('time').textContent = "Time: " + data.time;
+            document.getElementById('time').textContent = "Time: " + data.interviewTime;
             document.getElementById('date').textContent = "Date: " + data.interviewDate;
             document.getElementById('interviewType').textContent = "Interview type: " + data.interviewType;
             if (data.interviewType == 'online') {

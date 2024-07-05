@@ -26,14 +26,41 @@ var userId = localStorage.getItem('auth-token');
 
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
+    const isEditMode = urlParams.get('edit') === 'true';
     jobTitle = urlParams.get('jobTitle');
     jobId = urlParams.get('id');
 
     if (jobTitle && jobId) {
         getJobDetails(jobId);
         document.getElementById('job-title').textContent = `APPLY FOR THE ${decodeURIComponent(jobTitle)} ROLE`;
+
     } else {
         document.getElementById('job-title').textContent = 'Job Title: Not specified';
+    }
+
+    // Prefill form with data from localStorage
+    const applicationData = JSON.parse(localStorage.getItem('applicationData'));
+    if (applicationData) {
+        document.getElementById('name').value = applicationData.name;
+        document.getElementById('age').value = applicationData.age;
+        document.getElementById('address').value = applicationData.address;
+        document.getElementById('phone').value = applicationData.phone;
+        document.getElementById('gender').value = applicationData.gender;
+        document.getElementById('email').value = applicationData.email;
+        document.getElementById('grad-degree').value = applicationData.gradDegree;
+        document.getElementById('grad-percentage').value = applicationData.gradPercentage;
+        document.getElementById('grad-diploma').value = applicationData.gradDiploma;
+        document.getElementById('college-percentage').value = applicationData.collegePercentage;
+        document.getElementById('skills').value = applicationData.skills;
+        document.getElementById('total-years-of-experience').value = applicationData.totalYears;
+        document.getElementById('designation').value = applicationData.designation;
+    }
+
+    // Replace the "Apply" button with an "Update" button if in edit mode
+    if (isEditMode) {
+        const applyButton = document.getElementById('submit');
+        applyButton.id = 'update';
+        applyButton.textContent = 'Update';
     }
 });
 
@@ -42,7 +69,6 @@ function getUserInformation(id) {
         const data = snapshot.val();
         email = data.email;
         userName = data.userName;
-
     });
 }
 
@@ -58,10 +84,17 @@ function getJobDetails(jobId) {
     });
 }
 
-const submit = document.getElementById('submit');
+// Submit event for Apply button
+const submitButton = document.getElementById('submit');
+submitButton?.addEventListener('click', handleFormSubmission);
 
-submit.addEventListener('click', (e) => {
+// Submit event for Update button
+const updateButton = document.getElementById('update');
+updateButton?.addEventListener('click', handleFormSubmission);
+
+function handleFormSubmission(e) {
     e.preventDefault();
+    
     const imageRef = storageRef(storage, 'images/' + fileName);
     const metadata = {
         contentType: 'image/jpeg',
@@ -85,54 +118,75 @@ submit.addEventListener('click', (e) => {
     const totalYears = document.getElementById('total-years-of-experience').value.trim();
     const designation = document.getElementById('designation').value.trim();
 
-    
+    const applicationData = {
+        name: name,
+        age: age,
+        address: address,
+        phone: phone,
+        gender: gender,
+        email: email,
+        gradDegree: gradDegree,
+        gradPercentage: gradPercentage,
+        gradDiploma: gradDiploma,
+        collegePercentage: collegePercentage,
+        skills: skills,
+        totalYears: totalYears,
+        designation: designation,
+        cv: fileName  // Assuming fileName is being set correctly elsewhere
+    };
+
+    // Store data in localStorage
+    localStorage.setItem('applicationData', JSON.stringify(applicationData));
+
+    // Show alert and redirect to profile page
+    alert('Application submitted successfully!');
+    window.location.href = 'profile.html';
+
+    // Optionally, handle file upload and database update
     uploadBytesResumable(imageRef, fileItem, metadata)
         .then((snapshot) => {
             console.log('Uploaded', snapshot.totalBytes, 'bytes.');
             console.log('File metadata:', snapshot.metadata);
             // Let's get a download URL for the file.
-            getDownloadURL(snapshot.ref).then((url) => {
-                const applicationId = generateRandomString();
-    
-                const applicationDetails = {
-                    cvUrl: url,
-                    userName: name,
-                    email: email,
-                    roleId: jobId,
-                    roleName: jobTitle,
-                    applicationId: applicationId,
-                    applicationStatus: 'pending',
-                    description: skills,
-                    age:age,
-                    address:address,
-                    phone:phone,
-                    gender:gender,
-                    gradDegree:gradDegree,
-                    gradPercentage:gradPercentage,
-                    gradDiploma:gradDiploma,
-                    collegePercentage:collegePercentage,
-                    designation:designation,
-                    totalYears:totalYears,
-                    jobId:jobId,
-                    userId:userId
-                }
+            return getDownloadURL(snapshot.ref);
+        })
+        .then((url) => {
+            const applicationId = generateRandomString();
 
-                const jobRef = ref(db, 'application/' + applicationId);
-                set(jobRef, applicationDetails)
-                    .then(() => {
-                        alert('Application successful !!')
-                    })
-                    .catch((e) => {
-                        alert('error occurred !!')
-                    })
+            const applicationDetails = {
+                cvUrl: url,
+                userName: name,
+                email: email,
+                roleId: jobId,
+                roleName: jobTitle,
+                applicationId: applicationId,
+                applicationStatus: 'pending',
+                description: skills,
+                age: age,
+                address: address,
+                phone: phone,
+                gender: gender,
+                gradDegree: gradDegree,
+                gradPercentage: gradPercentage,
+                gradDiploma: gradDiploma,
+                collegePercentage: collegePercentage,
+                designation: designation,
+                totalYears: totalYears,
+                jobId: jobId,
+                userId: userId
+            };
 
-            });
-        }).catch((error) => {
-            console.error('Upload failed', error);
-            // ...
+            const jobRef = ref(db, 'application/' + applicationId);
+            return set(jobRef, applicationDetails);
+        })
+        .then(() => {
+            alert('Application successful!');
+        })
+        .catch((e) => {
+            console.error('Upload failed', e);
+            alert('An error occurred!');
         });
-})
-
+}
 
 function generateRandomString() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -142,6 +196,3 @@ function generateRandomString() {
     }
     return result;
 }
-
-
-
