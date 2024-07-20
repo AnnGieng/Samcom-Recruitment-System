@@ -9,26 +9,34 @@
 </head>
 
 <body>
-
-    <li class="nav-btn"><a href="/index.html" class="button">Logout</a></li>
-    </ul>
-    <div class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-    </div>
+    <nav>
+        <ul>
+            <li class="nav-btn"><a href="/index.html" class="button">Logout</a></li>
+        </ul>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
     </nav>
+
     <div class="container">
         <h1>Applicant Details</h1>
         <div id="application-container">
+            <!-- Applicant details section -->
             <div id="applicant-details">
-               
+                <!-- Applicant details will be dynamically injected here -->
+            </div>
+            <!-- Job details section -->
+            <div id="job-details">
+                <!-- Job details will be dynamically injected here -->
             </div>
             <button id="download-cv" class="button">Download CV</button>
             <button id="approve" class="button">Approve</button>
             <button id="reject" class="button">Reject</button>
         </div>
+
+        <!-- Interview scheduling section -->
         <div id="interview-section" style="display: none;">
             <label for="interview-date">Select Interview Date:</label>
             <input type="date" id="interview-date">
@@ -54,7 +62,6 @@
             </div>
             <button id="submit-interview">Submit</button>
         </div>
-    </div>
     </div>
     <script type="module" src="viewApplication.js"></script>
 </body>

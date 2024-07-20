@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-storage.js";
 
 var fileItem;
@@ -12,11 +13,10 @@ const firebaseConfig = {
     storageBucket: "recruitmentmanagement-15313.appspot.com",
     messagingSenderId: "330771658770",
     appId: "1:330771658770:web:c589141d0df9aa14ab40cb",
-    databaseURL: "https://recruitmentmanagement-15313-default-rtdb.europe-west1.firebasedatabase.app",
-    storageBucket: "gs://recruitmentmanagement-15313.appspot.com"
+    databaseURL: "https://recruitmentmanagement-15313-default-rtdb.europe-west1.firebasedatabase.app"
 };
 initializeApp(firebaseConfig);
-
+const auth = getAuth();
 const db = getDatabase();
 const storage = getStorage();
 
@@ -33,27 +33,31 @@ document.addEventListener('DOMContentLoaded', function () {
     if (jobTitle && jobId) {
         getJobDetails(jobId);
         document.getElementById('job-title').textContent = `APPLY FOR THE ${decodeURIComponent(jobTitle)} ROLE`;
-
     } else {
         document.getElementById('job-title').textContent = 'Job Title: Not specified';
     }
 
-    // Prefill form with data from localStorage
-    const applicationData = JSON.parse(localStorage.getItem('applicationData'));
-    if (applicationData) {
-        document.getElementById('name').value = applicationData.name;
-        document.getElementById('age').value = applicationData.age;
-        document.getElementById('address').value = applicationData.address;
-        document.getElementById('phone').value = applicationData.phone;
-        document.getElementById('gender').value = applicationData.gender;
-        document.getElementById('email').value = applicationData.email;
-        document.getElementById('grad-degree').value = applicationData.gradDegree;
-        document.getElementById('grad-percentage').value = applicationData.gradPercentage;
-        document.getElementById('grad-diploma').value = applicationData.gradDiploma;
-        document.getElementById('college-percentage').value = applicationData.collegePercentage;
-        document.getElementById('skills').value = applicationData.skills;
-        document.getElementById('total-years-of-experience').value = applicationData.totalYears;
-        document.getElementById('designation').value = applicationData.designation;
+    // Clear form fields
+    clearFormFields();
+
+    // Prefill form with data from localStorage only if in edit mode
+    if (isEditMode) {
+        const applicationData = JSON.parse(localStorage.getItem('applicationData'));
+        if (applicationData) {
+            document.getElementById('name').value = applicationData.name;
+            document.getElementById('age').value = applicationData.age;
+            document.getElementById('address').value = applicationData.address;
+            document.getElementById('phone').value = applicationData.phone;
+            document.getElementById('gender').value = applicationData.gender;
+            document.getElementById('email').value = applicationData.email;
+            document.getElementById('grad-degree').value = applicationData.gradDegree;
+            document.getElementById('grad-percentage').value = applicationData.gradPercentage;
+            document.getElementById('grad-diploma').value = applicationData.gradDiploma;
+            document.getElementById('college-percentage').value = applicationData.collegePercentage;
+            document.getElementById('skills').value = applicationData.skills;
+            document.getElementById('total-years-of-experience').value = applicationData.totalYears;
+            document.getElementById('designation').value = applicationData.designation;
+        }
     }
 
     // Replace the "Apply" button with an "Update" button if in edit mode
@@ -62,6 +66,14 @@ document.addEventListener('DOMContentLoaded', function () {
         applyButton.id = 'update';
         applyButton.textContent = 'Update';
     }
+
+    // Attach event listener to file input
+    const fileInput = document.getElementById('cv');
+    fileInput.addEventListener('change', handleFileUpload);
+
+    // Attach event listener to Apply/Update button
+    document.getElementById('submit')?.addEventListener('click', handleFormSubmission);
+    document.getElementById('update')?.addEventListener('click', handleFormSubmission);
 });
 
 function getUserInformation(id) {
@@ -70,12 +82,14 @@ function getUserInformation(id) {
         email = data.email;
         userName = data.userName;
     });
+    
+    
 }
 
 function getJobDetails(jobId) {
     onValue(ref(db, 'jobs/' + jobId), (snapshot) => {
         const data = snapshot.val();
-        console.log('jod desc: ' + data.experienceDescription);
+        console.log('job desc: ' + data.experienceDescription);
         const mandatorySkill = document.getElementById('mandatoryskill');
         const experienceLevel = document.getElementById('experience-level');
 
@@ -84,25 +98,22 @@ function getJobDetails(jobId) {
     });
 }
 
-// Submit event for Apply button
-const submitButton = document.getElementById('submit');
-submitButton?.addEventListener('click', handleFormSubmission);
-
-// Submit event for Update button
-const updateButton = document.getElementById('update');
-updateButton?.addEventListener('click', handleFormSubmission);
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        fileItem = file;
+        fileName = file.name;
+        console.log('File uploaded:', fileName);
+    }
+}
 
 function handleFormSubmission(e) {
     e.preventDefault();
-    
-    const imageRef = storageRef(storage, 'images/' + fileName);
-    const metadata = {
-        contentType: 'image/jpeg',
-        customMetadata: {
-            'uploadedBy': 'user123',
-            'description': 'Profile picture'
-        }
-    };
+
+    if (!fileItem) {
+        alert('Please upload a CV.');
+        return;
+    }
 
     const name = document.getElementById('name').value.trim();
     const age = document.getElementById('age').value.trim();
@@ -132,67 +143,93 @@ function handleFormSubmission(e) {
         skills: skills,
         totalYears: totalYears,
         designation: designation,
-        cv: fileName  // Assuming fileName is being set correctly elsewhere
+        cv: 'Uploaded'
     };
+    if (!jobId || !userId) {
+        alert('Job ID or User ID is missing. Please reload the page and try again.');
+        return;
+    }
 
-    // Store data in localStorage
-    localStorage.setItem('applicationData', JSON.stringify(applicationData));
+    const applicationRef = ref(db, `applications/${jobId}_${userId}`);
+    const urlParams = new URLSearchParams(window.location.search);
+    const isEditMode = urlParams.get('edit') === 'true';
 
-    // Show alert and redirect to profile page
-    alert('Application submitted successfully!');
-    window.location.href = 'profile.html';
+    onValue(applicationRef, (snapshot) => {
+        if (snapshot.exists() && !isEditMode) {
+            alert('You have already applied for this job.');
+            return;
+        }
 
-    // Optionally, handle file upload and database update
-    uploadBytesResumable(imageRef, fileItem, metadata)
-        .then((snapshot) => {
-            console.log('Uploaded', snapshot.totalBytes, 'bytes.');
-            console.log('File metadata:', snapshot.metadata);
-            // Let's get a download URL for the file.
-            return getDownloadURL(snapshot.ref);
-        })
-        .then((url) => {
-            const applicationId = generateRandomString();
+        localStorage.setItem('applicationData', JSON.stringify(applicationData));
 
-            const applicationDetails = {
-                cvUrl: url,
-                userName: name,
-                email: email,
-                roleId: jobId,
-                roleName: jobTitle,
-                applicationId: applicationId,
-                applicationStatus: 'pending',
-                description: skills,
-                age: age,
-                address: address,
-                phone: phone,
-                gender: gender,
-                gradDegree: gradDegree,
-                gradPercentage: gradPercentage,
-                gradDiploma: gradDiploma,
-                collegePercentage: collegePercentage,
-                designation: designation,
-                totalYears: totalYears,
-                jobId: jobId,
-                userId: userId
-            };
+        const imageRef = storageRef(storage, 'cv/' + fileName);
+        const metadata = {
+            contentType: fileItem.type,
+            customMetadata: {
+                'uploadedBy': userId,
+                'description': 'CV document'
+            }
+        };
 
-            const jobRef = ref(db, 'application/' + applicationId);
-            return set(jobRef, applicationDetails);
-        })
-        .then(() => {
-            alert('Application successful!');
-        })
-        .catch((e) => {
-            console.error('Upload failed', e);
-            alert('An error occurred!');
-        });
+        uploadBytesResumable(imageRef, fileItem, metadata)
+            .then((snapshot) => {
+                console.log('Uploaded', snapshot.totalBytes, 'bytes.');
+                console.log('File metadata:', snapshot.metadata);
+                return getDownloadURL(snapshot.ref);
+            })
+            .then((url) => {
+                const applicationDetails = {
+                    cvUrl: url,
+                    userName: name,
+                    email: email,
+                    roleId: jobId,
+                    roleName: jobTitle,
+                    applicationStatus: 'pending',
+                    description: skills,
+                    age: age,
+                    address: address,
+                    phone: phone,
+                    gender: gender,
+                    gradDegree: gradDegree,
+                    gradPercentage: gradPercentage,
+                    gradDiploma: gradDiploma,
+                    collegePercentage: collegePercentage,
+                    designation: designation,
+                    totalYears: totalYears,
+                    jobId: jobId,
+                    userId: userId
+                };
+
+                if (isEditMode) {
+                    return update(applicationRef, applicationDetails);
+                } else {
+                    return set(applicationRef, applicationDetails);
+                }
+            })
+            .then(() => {
+                alert(isEditMode ? 'Application updated successfully!' : 'Application submitted successfully!');
+                clearFormFields(); // Clear the form fields after successful submission
+                window.location.href = 'profile.html';
+            })
+            .catch((e) => {
+                console.error('Upload failed', e);
+                alert('An error occurred!');
+            });
+    }, { onlyOnce: true });
 }
 
-function generateRandomString() {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let result = "";
-    for (let i = 0; i < 6; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
+function clearFormFields() {
+    document.getElementById('name').value = '';
+    document.getElementById('age').value = '';
+    document.getElementById('address').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('gender').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('grad-degree').value = '';
+    document.getElementById('grad-percentage').value = '';
+    document.getElementById('grad-diploma').value = '';
+    document.getElementById('college-percentage').value = '';
+    document.getElementById('skills').value = '';
+    document.getElementById('total-years-of-experience').value = '';
+    document.getElementById('designation').value = '';
 }

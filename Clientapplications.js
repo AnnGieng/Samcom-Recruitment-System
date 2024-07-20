@@ -1,8 +1,5 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-import { getDatabase, ref, set, child, get,onValue } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,41 +12,47 @@ const firebaseConfig = {
     databaseURL: "https://recruitmentmanagement-15313-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
-initializeApp(firebaseConfig)
+initializeApp(firebaseConfig);
 const db = getDatabase();
 
+const uid = localStorage.getItem('auth-token');
 
-const uid = localStorage.getItem('auth-token')
-
-if(uid){
+if (uid) {
     console.log(`Uid is ${uid}`);
-}else{
+} else {
     console.log(`Uid is null`);
 }
 
-onValue(ref(db, 'application'), (snapshot) => {
+const applicationsRef = ref(db, 'applications');
+onValue(applicationsRef, (snapshot) => {
     const data = snapshot.val();
+    if (!data) {
+        console.log('No applications found.');
+        return;
+    }
+
     const dataTableBody = document.getElementById('application-table').getElementsByTagName('tbody')[0];
-    dataTableBody.innerHTML = ''
+    dataTableBody.innerHTML = '';
+
     for (let key in data) {
-        if(data[key].userId === uid){
+        if (data[key].userId === uid) {
             let row = dataTableBody.insertRow();
             let cellRole = row.insertCell(0);
             let cellStatus = row.insertCell(1);
             let cellView = row.insertCell(2);
-            let applicationId = data[key].applicationId;
-    
-            // Create an anchor element for the "Apply" link
+
+            let applicationId = key; // Use the key as applicationId
+
+            // Create an anchor element for the "View" link
             let viewLink = document.createElement('a');
             viewLink.textContent = 'View';
             viewLink.href = `ApplicationDetails.html?applicationId=${encodeURIComponent(applicationId)}`;
-            // applyLink.target = '_blank';
-            if( data[key].applicationStatus === 'Interview Scheduled'){
+
+            if (data[key].applicationStatus === 'Interview Scheduled') {
                 cellView.appendChild(viewLink);
             }
             cellRole.textContent = data[key].roleName;
             cellStatus.textContent = data[key].applicationStatus;
-            console.log(data[key].userName);
         }
     }
 });
