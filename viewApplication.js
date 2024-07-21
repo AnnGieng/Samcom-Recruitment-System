@@ -60,13 +60,7 @@ if (applicationId) {
             // Handle CV download
             const downloadCvButton = document.getElementById('download-cv');
             downloadCvButton.addEventListener('click', () => {
-                getDownloadURL(storageRef(storage, `cv/${data.cvFileName}`))
-                    .then((url) => {
-                        window.open(url, '_blank');
-                    })
-                    .catch((error) => {
-                        console.error("Error downloading CV: ", error);
-                    });
+                window.open(data.cvUrl, '_blank');
             });
 
             // Handle application approval
