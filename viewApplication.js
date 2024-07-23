@@ -21,27 +21,26 @@ const urlParams = new URLSearchParams(window.location.search);
 const applicationId = urlParams.get('applicationId');
 
 if (applicationId) {
-    // Fetch applicant details
     get(ref(db, `applications/${applicationId}`)).then((snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             document.getElementById('applicant-details').innerHTML = `
-            <p><strong>Name:</strong> ${data.userName}</p>
-            <p><strong>Email:</strong> ${data.email}</p>
-            <p><strong>Occupation:</strong> ${data.roleName}</p>
-            <p><strong>Skills:</strong> ${data.description}</p>
-            <p><strong>Age:</strong> ${data.age}</p>
-            <p><strong>Address:</strong> ${data.address}</p>
-            <p><strong>Phone Number:</strong> ${data.phone}</p>
-            <p><strong>Gender:</strong> ${data.gender}</p>
-            <p><strong>Graduation Degree:</strong> ${data.gradDegree}</p>
-            <p><strong>Graduation Percentage:</strong> ${data.gradPercentage}</p>
-            <p><strong>Graduation Diploma:</strong> ${data.gradDiploma}</p>
-            <p><strong>College Percentage:</strong> ${data.collegePercentage}</p>
-            <p><strong>Total Years of Experience:</strong> ${data.totalYears}</p>
-            <p><strong>Designation:</strong> ${data.designation}</p>
-            <p><strong>CV:</strong> ${data.cvUrl ? 'Uploaded' : 'Not Uploaded'}</p>
-        `;
+                <p><strong>Name:</strong> ${data.userName}</p>
+                <p><strong>Email:</strong> ${data.email}</p>
+                <p><strong>Occupation:</strong> ${data.roleName}</p>
+                <p><strong>Skills:</strong> ${data.description}</p>
+                <p><strong>Age:</strong> ${data.age}</p>
+                <p><strong>Address:</strong> ${data.address}</p>
+                <p><strong>Phone Number:</strong> ${data.phone}</p>
+                <p><strong>Gender:</strong> ${data.gender}</p>
+                <p><strong>Graduation Degree:</strong> ${data.gradDegree}</p>
+                <p><strong>Graduation Percentage:</strong> ${data.gradPercentage}</p>
+                <p><strong>Graduation Diploma:</strong> ${data.gradDiploma}</p>
+                <p><strong>College Percentage:</strong> ${data.collegePercentage}</p>
+                <p><strong>Total Years of Experience:</strong> ${data.totalYears}</p>
+                <p><strong>Designation:</strong> ${data.designation}</p>
+                <p><strong>CV:</strong> ${data.cvUrl ? 'Uploaded' : 'Not Uploaded'}</p>
+            `;
 
             // Fetch job details
             get(ref(db, `jobs/${data.roleId}`))
@@ -49,7 +48,7 @@ if (applicationId) {
                     if (snapshot.exists()) {
                         const jobData = snapshot.val();
                         document.getElementById('job-details').innerHTML = `
-                            
+                            <!-- Job details can be added here -->
                         `;
                     }
                 })
@@ -57,23 +56,39 @@ if (applicationId) {
                     console.error("Error fetching job details: ", error);
                 });
 
-            // Handle CV download
             const downloadCvButton = document.getElementById('download-cv');
             downloadCvButton.addEventListener('click', () => {
                 window.open(data.cvUrl, '_blank');
             });
 
-            // Handle application approval
             document.getElementById('approve').onclick = () => {
                 document.getElementById('interview-section').style.display = 'block';
             };
 
-            // Handle interview submission
+            document.getElementById('reject').onclick = () => {
+                update(ref(db, `applications/${applicationId}`), {
+                    applicationStatus: 'Rejected'
+                }).then(() => {
+                    alert('Application rejected.');
+                    window.location.href = '/applications.html';
+                }).catch((error) => {
+                    console.error("Error rejecting application: ", error);
+                });
+            };
+
+            document.querySelectorAll('input[name="interview-type"]').forEach((radio) => {
+                radio.addEventListener('change', (event) => {
+                    const interviewType = event.target.value;
+                    document.getElementById('online-link').style.display = interviewType === 'online' ? 'block' : 'none';
+                    document.getElementById('physical-link').style.display = interviewType === 'physical' ? 'block' : 'none';
+                });
+            });
+
             document.getElementById('submit-interview').onclick = () => {
                 const interviewDate = document.getElementById('interview-date').value;
                 const interviewTime = document.getElementById('interview-time').value;
                 const interviewType = document.querySelector('input[name="interview-type"]:checked').value;
-                const interviewLink = interviewType === 'online' 
+                const interviewLink = interviewType === 'online'
                     ? document.getElementById('google-meet-link').value
                     : document.getElementById('google-map-link').value;
 

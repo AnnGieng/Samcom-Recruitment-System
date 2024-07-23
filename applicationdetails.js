@@ -1,7 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-import { getDatabase, ref, set, child, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,36 +12,39 @@ const firebaseConfig = {
     databaseURL: "https://recruitmentmanagement-15313-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
-initializeApp(firebaseConfig)
+// Initialize Firebase
+initializeApp(firebaseConfig);
 const db = getDatabase();
-var applicationId;
 
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
-    applicationId = urlParams.get('applicationId');
+    const applicationId = urlParams.get('applicationId');
     if (applicationId) {
         console.log('Application Id is ' + applicationId);
-        getApplicationDetails(applicationId)
+        getApplicationDetails(applicationId);
     } else {
         console.log('Application Id is null');
     }
 });
 
 function getApplicationDetails(id) {
-    onValue(ref(db, "application/" + id), (snapshot) => {
+    const applicationRef = ref(db, "applications/" + id); // Correct the path if necessary
+    onValue(applicationRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
             console.log(`Date is ${data.interviewDate}`);
             document.getElementById('time').textContent = "Time: " + data.interviewTime;
             document.getElementById('date').textContent = "Date: " + data.interviewDate;
             document.getElementById('interviewType').textContent = "Interview type: " + data.interviewType;
-            if (data.interviewType == 'online') {
-                document.getElementById('meetingLink').textContent = "Google meet link: " + data.googleMeetLink;;
+            if (data.interviewType === 'online') {
+                document.getElementById('meetingLink').textContent = "Google meet link: " + data.interviewLink;
             } else {
-                document.getElementById('meetingLink').textContent = "Google Map link: " + data.googleMapsLink;
+                document.getElementById('meetingLink').textContent = "Google Map link: " + data.interviewLink;
             }
         } else {
-            console.log(`Data is null`);
+            console.log(`Data is null for application ID: ${id}`);
         }
+    }, (error) => {
+        console.error("Error fetching data: ", error);
     });
 }
