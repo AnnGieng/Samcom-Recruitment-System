@@ -48,15 +48,22 @@ function editJob(jobId) {
 }
 
 function deleteJob(jobId) {
-    const jobRef = ref(db, 'jobs/' + jobId);
-    remove(jobRef)
-        .then(() => {
-            alert('Job deleted successfully');
-            loadJobs();
-        })
-        .catch((error) => {
-            console.error('Error deleting job:', error);
-        });
+    const confirmDelete = confirm("Are you sure you want to delete this job?");
+    if (confirmDelete) {
+        const jobRef = ref(db, 'jobs/' + jobId);
+        remove(jobRef)
+            .then(() => {
+                alert('Job deleted successfully');
+                loadJobs();
+            })
+            .catch((error) => {
+                console.error('Error deleting job:', error);
+            });
+    }
 }
+
+// Make the functions globally accessible
+window.editJob = editJob;
+window.deleteJob = deleteJob;
 
 document.addEventListener('DOMContentLoaded', loadJobs);

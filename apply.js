@@ -5,6 +5,9 @@ import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } f
 
 var fileItem;
 var fileName;
+var currentUserId;
+var registeredUserName;
+var registeredUserEmail;
 
 const firebaseConfig = {
     apiKey: "AIzaSyCt0Yfl1gTu2lMtFFKyWtaWDc8y1NqDimw",
@@ -22,13 +25,23 @@ const storage = getStorage();
 
 var jobId;
 var jobTitle;
-var userId = localStorage.getItem('auth-token');
 
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const isEditMode = urlParams.get('edit') === 'true';
     jobTitle = urlParams.get('jobTitle');
     jobId = urlParams.get('id');
+
+    // Get the current user ID and user information
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUserId = user.uid; // Set the current user's ID
+            getUserInformation(currentUserId); // Fetch user information
+        } else {
+            alert('You must be logged in to apply.');
+            window.location.href = 'login.html'; // Redirect to login page if not logged in
+        }
+    });
 
     if (jobTitle && jobId) {
         getJobDetails(jobId);
@@ -79,11 +92,13 @@ document.addEventListener('DOMContentLoaded', function () {
 function getUserInformation(id) {
     onValue(ref(db, 'users/' + id), (snapshot) => {
         const data = snapshot.val();
-        email = data.email;
-        userName = data.userName;
+        if (data) {
+            registeredUserName = data.userName;
+            registeredUserEmail = data.email;
+        } else {
+            console.error('No user data found.');
+        }
     });
-    
-    
 }
 
 function getJobDetails(jobId) {
@@ -129,6 +144,12 @@ function handleFormSubmission(e) {
     const totalYears = document.getElementById('total-years-of-experience').value.trim();
     const designation = document.getElementById('designation').value.trim();
 
+    // Check if the submitted name and email match the registered details
+    if (name !== registeredUserName || email !== registeredUserEmail) {
+        alert('Your name or email does not match the registered details.');
+        return;
+    }
+
     const applicationData = {
         name: name,
         age: age,
@@ -145,12 +166,13 @@ function handleFormSubmission(e) {
         designation: designation,
         cv: 'Uploaded'
     };
-    if (!jobId || !userId) {
+
+    if (!jobId || !currentUserId) {
         alert('Job ID or User ID is missing. Please reload the page and try again.');
         return;
     }
 
-    const applicationRef = ref(db, `applications/${jobId}_${userId}`);
+    const applicationRef = ref(db, `applications/${jobId}_${currentUserId}`);
     const urlParams = new URLSearchParams(window.location.search);
     const isEditMode = urlParams.get('edit') === 'true';
 
@@ -166,7 +188,7 @@ function handleFormSubmission(e) {
         const metadata = {
             contentType: fileItem.type,
             customMetadata: {
-                'uploadedBy': userId,
+                'uploadedBy': currentUserId,
                 'description': 'CV document'
             }
         };
@@ -197,7 +219,7 @@ function handleFormSubmission(e) {
                     designation: designation,
                     totalYears: totalYears,
                     jobId: jobId,
-                    userId: userId
+                    userId: currentUserId
                 };
 
                 if (isEditMode) {
