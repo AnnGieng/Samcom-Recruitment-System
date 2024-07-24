@@ -91,6 +91,7 @@ if (applicationId) {
                 const interviewLink = interviewType === 'online'
                     ? document.getElementById('google-meet-link').value
                     : document.getElementById('google-map-link').value;
+                const interviewer = document.getElementById('interviewer-select').value;
 
                 if (interviewDate && interviewTime) {
                     update(ref(db, `applications/${applicationId}`), {
@@ -98,6 +99,7 @@ if (applicationId) {
                         interviewTime: interviewTime,
                         interviewType: interviewType,
                         interviewLink: interviewLink,
+                        interviewer: interviewer,
                         applicationStatus: 'Interview Scheduled'
                     }).then(() => {
                         alert('Interview details updated successfully.');

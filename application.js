@@ -14,39 +14,121 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const db = getDatabase();
 
-onValue(ref(db, 'applications'), (snapshot) => {
-    const data = snapshot.val();
-    const dataTableBody = document.getElementById('applications-table').getElementsByTagName('tbody')[0];
-    dataTableBody.innerHTML = ''; // Clear existing content
+// Function to load external script
+function loadScript(url, callback) {
+    let script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    script.onload = callback;
+    document.head.appendChild(script);
+}
 
-    if (data) {
-        // Loop through each key-value pair in data
-        for (let key in data) {
-            let row = dataTableBody.insertRow();
-            let cellTitle = row.insertCell(0);
-            let cellName = row.insertCell(1);
-            let cellRole = row.insertCell(2);
-            let cellStatus = row.insertCell(3);
-            let cellApply = row.insertCell(4);
+// Function to generate report
+function generateReport() {
+    onValue(ref(db, 'applications'), (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Name,Email,Role,Status\n";
+            for (let key in data) {
+                let application = data[key];
+                csvContent += `${application.userName},${application.email},${application.roleName},${application.applicationStatus}\n`;
+            }
 
-            // Create an anchor element for the "View" link
-            let applyLink = document.createElement('a');
-            applyLink.textContent = 'View';
-            applyLink.href = `viewApplication.html?applicationId=${encodeURIComponent(key)}`;
-            applyLink.target = '_blank';
-
-            cellApply.appendChild(applyLink);
-
-            // Set content for each cell using data[key] properties
-            cellName.textContent = data[key].userName;
-            cellRole.textContent = data[key].roleName;
-            cellStatus.textContent = data[key].applicationStatus;
-            cellTitle.textContent = '*';
-            console.log("Applicant Name: " + data[key].userName);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            // Use FileSaver to save the file
+            window.saveAs(blob, 'applications_report.csv');
+        } else {
+            console.error("No data available for report");
         }
-    } else {
-        console.error("No data available");
-    }
-}, (error) => {
-    console.error("Error fetching data: ", error);
+    });
+}
+
+// Function to populate role filter options
+function populateRoleFilter() {
+    const roleFilter = document.getElementById('RoleApplied-filter');
+    onValue(ref(db, 'jobs'), (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            const roles = new Set();
+            for (let key in data) {
+                roles.add(data[key].jobTitle);
+            }
+            roles.forEach(role => {
+                let option = document.createElement('option');
+                option.value = role;
+                option.textContent = role;
+                roleFilter.appendChild(option);
+            });
+        }
+    });
+}
+
+// Function to update applications table
+function updateApplicationsTable(filterRole) {
+    onValue(ref(db, 'applications'), (snapshot) => {
+        const data = snapshot.val();
+        const dataTableBody = document.getElementById('applications-table').getElementsByTagName('tbody')[0];
+        dataTableBody.innerHTML = ''; // Clear existing content
+
+        if (data) {
+            let filteredData = data;
+            if (filterRole && filterRole !== 'all') {
+                filteredData = {};
+                for (let key in data) {
+                    if (data[key].roleName === filterRole) {
+                        filteredData[key] = data[key];
+                    }
+                }
+            }
+
+            // Loop through each key-value pair in data
+            let index = 1;
+            for (let key in filteredData) {
+                let row = dataTableBody.insertRow();
+                let cellIndex = row.insertCell(0);
+                let cellName = row.insertCell(1);
+                let cellRole = row.insertCell(2);
+                let cellStatus = row.insertCell(3);
+                let cellApply = row.insertCell(4);
+
+                // Create an anchor element for the "View" link
+                let applyLink = document.createElement('a');
+                applyLink.textContent = 'View';
+                applyLink.href = `viewApplication.html?applicationId=${encodeURIComponent(key)}`;
+                applyLink.target = '_blank';
+
+                cellApply.appendChild(applyLink);
+
+                // Set content for each cell using data[key] properties
+                cellIndex.textContent = index++;
+                cellName.textContent = filteredData[key].userName;
+                cellRole.textContent = filteredData[key].roleName;
+                cellStatus.textContent = filteredData[key].applicationStatus;
+            }
+
+            // Update the application count
+            document.querySelector('.application-header h2').textContent = `Application List (${index - 1})`;
+        } else {
+            console.error("No data available");
+        }
+    });
+}
+
+// Event listener for generate report button
+document.getElementById('generate-report').addEventListener('click', generateReport);
+
+// Event listener for role filter change
+document.getElementById('RoleApplied-filter').addEventListener('change', (event) => {
+    const selectedRole = event.target.value;
+    updateApplicationsTable(selectedRole);
+});
+
+// Initial population of the role filter and applications table
+populateRoleFilter();
+updateApplicationsTable('all');
+
+// Load FileSaver script dynamically
+loadScript('https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js', () => {
+    console.log('FileSaver script loaded successfully.');
 });

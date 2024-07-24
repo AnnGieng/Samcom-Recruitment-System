@@ -36,30 +36,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (profileData) {
-                document.getElementById('profile-name').textContent = profileData.userName;
-                document.getElementById('profile-age').textContent = profileData.age;
-                document.getElementById('profile-address').textContent = profileData.address;
-                document.getElementById('profile-phone').textContent = profileData.phone;
-                document.getElementById('profile-gender').textContent = profileData.gender;
-                document.getElementById('profile-email').textContent = profileData.email;
-                document.getElementById('profile-grad-degree').textContent = profileData.gradDegree;
-                document.getElementById('profile-grad-percentage').textContent = profileData.gradPercentage;
-                document.getElementById('profile-grad-diploma').textContent = profileData.gradDiploma;
-                document.getElementById('profile-college-percentage').textContent = profileData.collegePercentage;
-                document.getElementById('profile-designation').textContent = profileData.designation;
-                document.getElementById('profile-total-years-of-experience').textContent = profileData.totalYears;
-                document.getElementById('profile-skills').textContent = profileData.skills;
-                document.getElementById('profile-cv').textContent = 'Uploaded';
+                const profileFields = [
+                    { id: 'profile-name', value: profileData.userName },
+                    { id: 'profile-age', value: profileData.age },
+                    { id: 'profile-address', value: profileData.address },
+                    { id: 'profile-phone', value: profileData.phone },
+                    { id: 'profile-gender', value: profileData.gender },
+                    { id: 'profile-email', value: profileData.email },
+                    { id: 'profile-grad-degree', value: profileData.gradDegree },
+                    { id: 'profile-grad-percentage', value: profileData.gradPercentage },
+                    { id: 'profile-grad-diploma', value: profileData.gradDiploma },
+                    { id: 'profile-college-percentage', value: profileData.collegePercentage },
+                    { id: 'profile-designation', value: profileData.designation },
+                    { id: 'profile-total-years-of-experience', value: profileData.totalYears },
+                    { id: 'profile-skills', value: profileData.description },
+                    { id: 'profile-cv', value: 'Uploaded' }
+                ];
+
+                profileFields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (element) {
+                        element.textContent = field.value || 'N/A';
+                    } else {
+                        console.error(`Element with ID ${field.id} not found.`);
+                    }
+                });
             } else {
                 console.log('No profile data found for this user.');
             }
+        }, {
+            onlyOnce: true
         });
     } else {
         console.log('User ID not found in localStorage.');
     }
 
     // Edit button event listener
-    document.getElementById('edit-button').addEventListener('click', function() {
-        window.location.href = 'apply.html?edit=true';
-    });
+    const editButton = document.getElementById('edit-button');
+    if (editButton) {
+        editButton.addEventListener('click', () => {
+            window.location.href = 'apply.html?edit=true';
+        });
+    } else {
+        console.error('Edit button not found.');
+    }
 });
