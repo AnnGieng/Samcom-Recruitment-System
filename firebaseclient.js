@@ -32,8 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Ensure the element exists before adding an event listener
-    const applicationElement = document.querySelector('.nav-item .nav-link');
+    const applicationElement = document.getElementById('application');
 
     if (applicationElement) {
         applicationElement.addEventListener('click', (e) => {
@@ -42,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             applicationElement.click();
         });
     } else {
-        console.error("Element with class 'nav-item .nav-link' not found.");
+        console.error("Element with id 'application' not found.");
     }
 });
 
@@ -71,19 +70,29 @@ function displayJobs(jobs) {
 function filterJobs() {
     const searchJob = document.getElementById('searchJob').value.toLowerCase();
     const experienceLevel = document.getElementById('experienceLevel').value;
+    const mandatorySkill = document.getElementById('mandatorySkill').value.toLowerCase();
 
     const filteredJobs = {};
 
     for (let key in jobsData) {
         const jobTitleMatches = jobsData[key].jobTitle.toLowerCase().includes(searchJob);
         const experienceLevelMatches = experienceLevel === "" || jobsData[key].experienceLevel === experienceLevel;
+        const mandatorySkillMatches = mandatorySkill === "" || jobsData[key].mandatorySkill.toLowerCase().includes(mandatorySkill);
 
-        if (jobTitleMatches && experienceLevelMatches) {
+        if (jobTitleMatches && experienceLevelMatches && mandatorySkillMatches) {
             filteredJobs[key] = jobsData[key];
         }
     }
 
     displayJobs(filteredJobs);
+
+    // Display a message if no jobs match the search criteria
+    const noResultsMessage = document.getElementById('noResultsMessage');
+    if (Object.keys(filteredJobs).length === 0) {
+        noResultsMessage.style.display = 'block';
+    } else {
+        noResultsMessage.style.display = 'none';
+    }
 }
 
 // Attach the filterJobs function to the window object to make it globally accessible

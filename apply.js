@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (jobTitle && jobId) {
         getJobDetails(jobId);
-        document.getElementById('job-title').textContent = `APPLY FOR THE ${decodeURIComponent(jobTitle)} ROLE`;
+        document.getElementById('job-title').textContent =`APPLY FOR THE ${decodeURIComponent(jobTitle)} ROLE`;
     } else {
         document.getElementById('job-title').textContent = 'Job Title: Not specified';
     }
@@ -172,7 +172,8 @@ function handleFormSubmission(e) {
         return;
     }
 
-    const applicationRef = ref(db, `applications/${jobId}_${currentUserId}`);
+    const applicationRef =ref(db, `applications/${jobId}_${currentUserId}`);
+
     const urlParams = new URLSearchParams(window.location.search);
     const isEditMode = urlParams.get('edit') === 'true';
 
