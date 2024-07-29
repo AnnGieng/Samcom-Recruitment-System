@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (jobTitle && jobId) {
         getJobDetails(jobId);
-        document.getElementById('job-title').textContent =`APPLY FOR THE ${decodeURIComponent(jobTitle)} ROLE`;
+        document.getElementById('job-title').textContent = `APPLY FOR THE ${decodeURIComponent(jobTitle)} ROLE`;
     } else {
         document.getElementById('job-title').textContent = 'Job Title: Not specified';
     }
@@ -80,13 +80,16 @@ document.addEventListener('DOMContentLoaded', function () {
         applyButton.textContent = 'Update';
     }
 
-    // Attach event listener to file input
-    const fileInput = document.getElementById('cv');
-    fileInput.addEventListener('change', handleFileUpload);
-
-    // Attach event listener to Apply/Update button
+    // Attach event listeners to buttons
+    document.getElementById('cv').addEventListener('change', handleFileUpload);
     document.getElementById('submit')?.addEventListener('click', handleFormSubmission);
     document.getElementById('update')?.addEventListener('click', handleFormSubmission);
+    document.getElementById('add-education').addEventListener('click', () => {
+        window.location.href = 'addEducation.html';
+    });
+    document.getElementById('add-experience').addEventListener('click', () => {
+        window.location.href = 'addExperience.html';
+    });
 });
 
 function getUserInformation(id) {
@@ -95,6 +98,9 @@ function getUserInformation(id) {
         if (data) {
             registeredUserName = data.userName;
             registeredUserEmail = data.email;
+            // Prefill name and email fields
+            document.getElementById('name').value = registeredUserName;
+            document.getElementById('email').value = registeredUserEmail;
         } else {
             console.error('No user data found.');
         }
@@ -172,7 +178,7 @@ function handleFormSubmission(e) {
         return;
     }
 
-    const applicationRef =ref(db, `applications/${jobId}_${currentUserId}`);
+    const applicationRef = ref(db, `applications/${jobId}_${currentUserId}`);
 
     const urlParams = new URLSearchParams(window.location.search);
     const isEditMode = urlParams.get('edit') === 'true';
