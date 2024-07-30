@@ -32,10 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
     jobTitle = urlParams.get('jobTitle');
     jobId = urlParams.get('id');
 
+    console.log("Job Title from URL: ", jobTitle);
+    console.log("Job ID from URL: ", jobId);
+
     // Get the current user ID and user information
     onAuthStateChanged(auth, (user) => {
         if (user) {
             currentUserId = user.uid; // Set the current user's ID
+            console.log("User ID: ", currentUserId);
             getUserInformation(currentUserId); // Fetch user information
         } else {
             alert('You must be logged in to apply.');
@@ -85,10 +89,16 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('submit')?.addEventListener('click', handleFormSubmission);
     document.getElementById('update')?.addEventListener('click', handleFormSubmission);
     document.getElementById('add-education').addEventListener('click', () => {
-        window.location.href = 'addEducation.html';
+        const jobTitle = urlParams.get('jobTitle');
+        const jobId = urlParams.get('id');
+        const userId = currentUserId;
+        window.location.href = `addEducation.html?jobTitle=${jobTitle}&id=${jobId}&userId=${userId}`;
     });
     document.getElementById('add-experience').addEventListener('click', () => {
-        window.location.href = 'addExperience.html';
+        const jobTitle = urlParams.get('jobTitle');
+        const jobId = urlParams.get('id');
+        const userId = currentUserId;
+        window.location.href = `addExperience.html?jobTitle=${jobTitle}&id=${jobId}&userId=${userId}`;
     });
 });
 
@@ -110,7 +120,7 @@ function getUserInformation(id) {
 function getJobDetails(jobId) {
     onValue(ref(db, 'jobs/' + jobId), (snapshot) => {
         const data = snapshot.val();
-        console.log('job desc: ' + data.experienceDescription);
+        console.log('Job details:', data);
         const mandatorySkill = document.getElementById('mandatoryskill');
         const experienceLevel = document.getElementById('experience-level');
 
@@ -173,15 +183,18 @@ function handleFormSubmission(e) {
         cv: 'Uploaded'
     };
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const isEditMode = urlParams.get('edit') === 'true';
+
     if (!jobId || !currentUserId) {
+        console.error("Job ID or User ID is missing.");
+        console.error("Job ID:", jobId);
+        console.error("User ID:", currentUserId);
         alert('Job ID or User ID is missing. Please reload the page and try again.');
         return;
     }
 
     const applicationRef = ref(db, `applications/${jobId}_${currentUserId}`);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const isEditMode = urlParams.get('edit') === 'true';
 
     onValue(applicationRef, (snapshot) => {
         if (snapshot.exists() && !isEditMode) {
@@ -238,7 +251,7 @@ function handleFormSubmission(e) {
             .then(() => {
                 alert(isEditMode ? 'Application updated successfully!' : 'Application submitted successfully!');
                 clearFormFields(); // Clear the form fields after successful submission
-                window.location.href = 'profile.html';
+                window.location.href = `profile.html?jobTitle=${jobTitle}&id=${jobId}&userId=${currentUserId}`;
             })
             .catch((e) => {
                 console.error('Upload failed', e);

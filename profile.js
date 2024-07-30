@@ -61,6 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error(`Element with ID ${field.id} not found.`);
                     }
                 });
+
+                // Edit button event listener
+                const editButton = document.getElementById('edit-button');
+                if (editButton) {
+                    editButton.addEventListener('click', () => {
+                        window.location.href = `apply.html?edit=true&jobTitle=${encodeURIComponent(profileData.roleName)}&id=${profileData.roleId}`;
+                    });
+                } else {
+                    console.error('Edit button not found.');
+                }
             } else {
                 console.log('No profile data found for this user.');
             }
@@ -69,15 +79,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.log('User ID not found in localStorage.');
-    }
-
-    // Edit button event listener
-    const editButton = document.getElementById('edit-button');
-    if (editButton) {
-        editButton.addEventListener('click', () => {
-            window.location.href = 'apply.html?edit=true';
-        });
-    } else {
-        console.error('Edit button not found.');
     }
 });
