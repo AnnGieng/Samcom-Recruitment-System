@@ -26,13 +26,14 @@ if (uid) {
 const notificationsRef = ref(db, `notifications/${uid}`);
 onValue(notificationsRef, (snapshot) => {
     const data = snapshot.val();
-    if (!data) {
-        console.log('No notifications found.');
-        return;
-    }
-
     const notificationsContainer = document.getElementById('notifications');
     notificationsContainer.innerHTML = '';
+
+    if (!data) {
+        console.log('No notifications found.');
+        notificationsContainer.innerHTML = '<p>No notifications found, or kindly wait as we process your application.</p>';
+        return;
+    }
 
     Object.values(data).forEach(notification => {
         let notificationElement = document.createElement('div');
